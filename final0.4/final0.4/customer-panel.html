@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUNGER PLUSS - Order Online</title>
+    <link rel="stylesheet" href="css/customer-panel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="customer-panel">
+        <header>
+            <div class="header-left">
+                <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </div>
+            <div class="header-center">
+                <a href="index.html" class="logo-text">HUNGER<span>PLUSS</span></a>
+            </div>
+            <div class="header-right">
+                <div class="table-selection">
+                    <label for="table-select">Table Number:</label>
+                    <select id="table-select">
+                        <option value="1">Table 1</option>
+                        <option value="2">Table 2</option>
+                        <option value="3">Table 3</option>
+                        <option value="4">Table 4</option>
+                        <option value="5">Table 5</option>
+                        <option value="6">Table 6</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="menu-section">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Search menu...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <button id="mobile-cart-toggle" class="mobile-cart-toggle">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-item-count">0</span>
+                    </button>
+                </div>
+
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-category="all">All</button>
+                    <button class="tab-btn" data-category="starters">Starters</button>
+                    <button class="tab-btn" data-category="mainCourse">Main Course</button>
+                    <button class="tab-btn" data-category="desserts">Desserts</button>
+                    <button class="tab-btn" data-category="drinks">Drinks</button>
+                </div>
+
+                <div class="menu-container" id="menu-items">
+                    <!-- Menu items will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <div class="cart-section">
+                <h2>Your Order</h2>
+                <button id="cart-close" class="cart-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be dynamically inserted here -->
+                </div>
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (10%):</span>
+                        <span id="tax">$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+                
+                <div class="customer-info">
+                    <h3>Customer Information</h3>
+                    <div class="form-group">
+                        <label for="customer-name">Name</label>
+                        <input type="text" id="customer-name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Phone Number</label>
+                        <input type="tel" id="customer-phone" placeholder="Enter your phone number">
+                    </div>
+                </div>
+                
+                <button id="place-order-btn" class="place-order-btn" disabled>Place Order</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 HUNGER PLUSS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Cart overlay for mobile -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+
+    <script src="js/customer-panel.js"></script>
+</body>
+</html> 

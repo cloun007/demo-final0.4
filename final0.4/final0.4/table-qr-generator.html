@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table QR Code Generator - T D R</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        input, button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        input {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #3e8e41;
+        }
+        
+        .qr-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .qr-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-canvas {
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .table-label {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #4CAF50;
+        }
+        
+        .qr-card p {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .download-btn {
+            margin-top: 10px;
+            background-color: #2196F3;
+        }
+        
+        .download-btn:hover {
+            background-color: #0b7dda;
+        }
+        
+        .print-all {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+        }
+        
+        @media print {
+            .controls, .print-all {
+                display: none;
+            }
+            
+            body {
+                background-color: white;
+            }
+            
+            .qr-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .qr-card {
+                box-shadow: none;
+                border: 1px solid #eee;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Table QR Code Generator</h1>
+    
+    <div class="controls">
+        <label for="base-url">Customer Panel URL:</label>
+        <input type="text" id="base-url" value="http://yourdomain.com/index.html" placeholder="Enter your website URL">
+        
+        <label for="table-count">Number of Tables:</label>
+        <input type="number" id="table-count" value="6" min="1" max="100">
+        
+        <div>
+            <button id="generate-btn">Generate QR Codes</button>
+            <button id="print-btn">Print All QR Codes</button>
+        </div>
+    </div>
+    
+    <div class="qr-container" id="qr-container">
+        <!-- QR codes will be generated here -->
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const baseUrlInput = document.getElementById('base-url');
+            const tableCountInput = document.getElementById('table-count');
+            const generateBtn = document.getElementById('generate-btn');
+            const printBtn = document.getElementById('print-btn');
+            const qrContainer = document.getElementById('qr-container');
+            
+            // Generate QR codes when button is clicked
+            generateBtn.addEventListener('click', generateQRCodes);
+            
+            // Print all QR codes
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Generate QR codes function
+            function generateQRCodes() {
+                const baseUrl = baseUrlInput.value.trim();
+                const tableCount = parseInt(tableCountInput.value);
+                
+                if (!baseUrl) {
+                    alert('Please enter a valid URL');
+                    return;
+                }
+                
+                if (isNaN(tableCount) || tableCount < 1) {
+                    alert('Please enter a valid number of tables');
+                    return;
+                }
+                
+                // Clear existing QR codes
+                qrContainer.innerHTML = '';
+                
+                // Generate QR code for each table
+                for (let i = 1; i <= tableCount; i++) {
+                    createQRCode(baseUrl, i);
+                }
+            }
+            
+            // Create QR code for a specific table
+            function createQRCode(baseUrl, tableNumber) {
+                // Create URL with table parameter
+                const url = new URL(baseUrl);
+                url.searchParams.set('table', tableNumber);
+                
+                // Create container for this QR code
+                const qrCard = document.createElement('div');
+                qrCard.className = 'qr-card';
+                
+                // Create canvas for QR code
+                const qrCanvas = document.createElement('canvas');
+                qrCanvas.className = 'qr-canvas';
+                
+                // Generate QR code
+                QRCode.toCanvas(qrCanvas, url.toString(), { width: 200 }, function(error) {
+                    if (error) console.error(error);
+                });
+                
+                // Create table label
+                const tableLabel = document.createElement('div');
+                tableLabel.className = 'table-label';
+                tableLabel.textContent = `Table ${tableNumber}`;
+                
+                // Create scan instruction
+                const scanInstr = document.createElement('p');
+                scanInstr.textContent = 'Scan to view menu & place order';
+                
+                // Create download button
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'download-btn';
+                downloadBtn.textContent = 'Download QR';
+                downloadBtn.addEventListener('click', function() {
+                    const link = document.createElement('a');
+                    link.download = `table-${tableNumber}-qr.png`;
+                    link.href = qrCanvas.toDataURL('image/png');
+                    link.click();
+                });
+                
+                // Add elements to card
+                qrCard.appendChild(qrCanvas);
+                qrCard.appendChild(tableLabel);
+                qrCard.appendChild(scanInstr);
+                qrCard.appendChild(downloadBtn);
+                
+                // Add card to container
+                qrContainer.appendChild(qrCard);
+            }
+            
+            // Generate default QR codes on page load
+            generateQRCodes();
+        });
+    </script>
+</body>
+<footer>
+    <p>&copy; 2025 HUNGER PLUSS. Working on it.</p>
+</footer>
+</html> 
